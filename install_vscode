@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Download URL for latest VSCode for x64 (RPM)
+download_url="https://update.code.visualstudio.com/latest/linux-rpm-x64/stable"
+
+# Temporary filename for downloaded package
+tmp_file="vscode-latest.rpm"
+
+# Check if dnf is available
+if ! which dnf >/dev/null 2>&1; then
+  echo "Error: dnf package manager not found. Script requires dnf."
+  exit 1
+fi
+
+# Download the latest VSCode package
+wget -qO "$tmp_file" "$download_url"
+
+# Check if download was successful
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to download VSCode package."
+  rm -f "$tmp_file"
+  exit 1
+fi
+
+# Install the downloaded package
+sudo dnf install -y "$tmp_file"
+
+# Remove the temporary file
+rm -f "$tmp_file"
+
+echo "VSCode installation complete!"
+
